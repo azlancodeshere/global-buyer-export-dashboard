@@ -1,0 +1,9 @@
+node_modules/
+.next/
+dist/
+.env
+*.log
+server/data/*.json
+server/uploads/
+*.tsbuildinfo
+.DS_Store
