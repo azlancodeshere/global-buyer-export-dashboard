@@ -2,6 +2,7 @@ node_modules/
 .next/
 dist/
 .env
+.vercel/
 *.log
 server/data/*.json
 server/uploads/
