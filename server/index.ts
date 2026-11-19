@@ -16,12 +16,19 @@ import type { Lead } from './types';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT || 5000;
-const UPLOAD_DIR = path.join(__dirname, 'uploads');
+// Vercel function filesystems are read-only outside /tmp.
+const UPLOAD_DIR = process.env.VERCEL ? '/tmp/gbed-uploads' : path.join(__dirname, 'uploads');
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 app.use(cors());
 app.use(express.json({ limit: '5mb' }));
 app.use('/uploads', express.static(UPLOAD_DIR));
+// express.static() is ignored on Vercel, so uploaded files are served explicitly.
+app.get('/uploads/:name', (req: Request, res: Response) => {
+  const file = path.join(UPLOAD_DIR, path.basename(String(req.params.name)));
+  if (!fs.existsSync(file)) return res.status(404).json({ error: 'File not found.' });
+  res.sendFile(file);
+});
 
 const memoryUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
 const presentationUpload = multer({
@@ -496,11 +503,16 @@ app.use((err: Error, _req: Request, res: Response, _next: express.NextFunction) 
   res.status(500).json({ error: err.message || 'Server error' });
 });
 
-app.listen(PORT, () => {
-  console.log(`\n  Global Buyer Export Dashboard API running at http://localhost:${PORT}`);
-  console.log(`  Config: ${JSON.stringify({
-    gemini: Boolean(process.env.GEMINI_API_KEY),
-    mail: getMode(),
-    discovery: process.env.SERPER_API_KEY || process.env.GOOGLE_CSE_KEY ? 'api' : 'keyless',
-  })}\n`);
-});
+// On Vercel the app is exported as a serverless function instead of listening.
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`\n  Global Buyer Export Dashboard API running at http://localhost:${PORT}`);
+    console.log(`  Config: ${JSON.stringify({
+      gemini: Boolean(process.env.GEMINI_API_KEY),
+      mail: getMode(),
+      discovery: process.env.SERPER_API_KEY || process.env.GOOGLE_CSE_KEY ? 'api' : 'keyless',
+    })}\n`);
+  });
+}
+
+export default app;

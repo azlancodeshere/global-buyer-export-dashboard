@@ -5,7 +5,8 @@ import { seedLeads } from './data/seed';
 import type { Activity, EmailRecord, Lead, PresentationMeta, StoreKey } from './types';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DATA_DIR = path.join(__dirname, 'data');
+// Vercel function filesystems are read-only outside /tmp, so data lives there in production.
+const DATA_DIR = process.env.VERCEL ? '/tmp/gbed-data' : path.join(__dirname, 'data');
 
 type StoreMap = {
   leads: Lead[];
