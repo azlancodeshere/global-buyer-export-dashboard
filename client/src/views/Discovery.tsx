@@ -21,7 +21,6 @@ const SOURCES = [
   { name: 'US Business Directories', icon: BookOpen },
 ];
 
-// Country → state → city narrowing, exactly as demonstrated in the video.
 const GEO: Record<string, Record<string, string[]>> = {
   'United States': {
     TX: ['Houston', 'Dallas', 'Austin', 'San Antonio', 'Fort Worth'],
@@ -109,8 +108,6 @@ export default function Discovery({ notify, refresh, runBusy, config, goTo }: Sh
   const states = Object.keys(GEO[country] || {});
   const cities = GEO[country]?.[stateCode] || [];
 
-  // Free-text override wins; otherwise build "City, State, Country".
-  // With no city picked, fall back to the state-level search shown in the video.
   const stateLabel = STATE_NAMES[stateCode] || stateCode;
   const location = customLocation.trim()
     ? customLocation.trim()

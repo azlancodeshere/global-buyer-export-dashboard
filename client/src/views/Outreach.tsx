@@ -63,7 +63,6 @@ export default function Outreach({ leads, config, notify, refresh, runBusy, pres
       setAttachment(meta);
       setHistory(hist);
     } catch {
-      /* handled by other pages */
     }
   };
   useEffect(() => { loadExtras(); }, []);

@@ -16,14 +16,12 @@ import type { Lead } from './types.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT || 5000;
-// Vercel function filesystems are read-only outside /tmp.
 const UPLOAD_DIR = process.env.VERCEL ? '/tmp/gbed-uploads' : path.join(__dirname, 'uploads');
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 app.use(cors());
 app.use(express.json({ limit: '5mb' }));
 app.use('/uploads', express.static(UPLOAD_DIR));
-// express.static() is ignored on Vercel, so uploaded files are served explicitly.
 app.get('/uploads/:name', (req: Request, res: Response) => {
   const file = path.join(UPLOAD_DIR, path.basename(String(req.params.name)));
   if (!fs.existsSync(file)) return res.status(404).json({ error: 'File not found.' });
@@ -57,9 +55,6 @@ function toArray(counts: Record<string, number>, limit = 8) {
     .slice(0, limit);
 }
 
-// ---------------------------------------------------------------------------
-// Health & configuration
-// ---------------------------------------------------------------------------
 app.get('/api/health', (_req: Request, res: Response) => res.json({ ok: true, time: new Date().toISOString() }));
 
 app.get('/api/config', (_req: Request, res: Response) => {
@@ -71,9 +66,6 @@ app.get('/api/config', (_req: Request, res: Response) => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// Stats / reporting
-// ---------------------------------------------------------------------------
 app.get('/api/stats', async (_req: Request, res: Response) => {
   const leads = store.read('leads');
   const emails = store.read('emails');
@@ -119,9 +111,6 @@ app.get('/api/stats', async (_req: Request, res: Response) => {
 
 app.get('/api/activity', (_req: Request, res: Response) => res.json(store.read('activity')));
 
-// ---------------------------------------------------------------------------
-// Leads
-// ---------------------------------------------------------------------------
 app.get('/api/leads', (req: Request, res: Response) => {
   let leads = store.read('leads');
   const { q, source, classification, emailStatus, emailed } = req.query;
@@ -205,9 +194,6 @@ app.delete('/api/leads/:id', async (req: Request, res: Response) => {
   res.json({ ok: true });
 });
 
-// ---------------------------------------------------------------------------
-// Buyer discovery
-// ---------------------------------------------------------------------------
 app.post('/api/discovery/search', async (req: Request, res: Response) => {
   const body = (req.body || {}) as {
     product?: string;
@@ -242,9 +228,6 @@ app.post('/api/discovery/search', async (req: Request, res: Response) => {
   }
 });
 
-// ---------------------------------------------------------------------------
-// CSV upload
-// ---------------------------------------------------------------------------
 function parseCSV(text: string): string[][] {
   const rows: string[][] = [];
   let row: string[] = [];
@@ -326,9 +309,6 @@ app.post('/api/leads/upload', memoryUpload.single('file'), async (req: Request, 
   res.json({ added: result.fresh.length, duplicates: result.duplicates });
 });
 
-// ---------------------------------------------------------------------------
-// Email validation
-// ---------------------------------------------------------------------------
 app.post('/api/validation/run', async (req: Request, res: Response) => {
   const body = (req.body || {}) as { ids?: string[] };
   const ids = Array.isArray(body.ids) && body.ids.length ? new Set(body.ids) : null;
@@ -360,9 +340,6 @@ app.post('/api/validation/run', async (req: Request, res: Response) => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// Gemini AI classification
-// ---------------------------------------------------------------------------
 app.post('/api/classify/run', async (req: Request, res: Response) => {
   const body = (req.body || {}) as { ids?: string[] };
   const ids = Array.isArray(body.ids) && body.ids.length ? new Set(body.ids) : null;
@@ -391,9 +368,6 @@ app.post('/api/classify/run', async (req: Request, res: Response) => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// Presentation PDF
-// ---------------------------------------------------------------------------
 app.get('/api/presentation', (_req: Request, res: Response) => res.json(store.read('presentation')[0] || null));
 
 app.post('/api/presentation', presentationUpload.single('file'), async (req: Request, res: Response) => {
@@ -426,9 +400,6 @@ app.delete('/api/presentation', async (_req: Request, res: Response) => {
   res.json({ ok: true });
 });
 
-// ---------------------------------------------------------------------------
-// Outreach / Gmail sender
-// ---------------------------------------------------------------------------
 app.get('/api/outreach/history', (_req: Request, res: Response) => res.json(store.read('emails')));
 
 app.post('/api/outreach/send', async (req: Request, res: Response) => {
@@ -489,9 +460,6 @@ app.post('/api/outreach/send', async (req: Request, res: Response) => {
   res.json({ mode, results });
 });
 
-// ---------------------------------------------------------------------------
-// Serve built frontend in production
-// ---------------------------------------------------------------------------
 const dist = path.join(__dirname, '..', 'client', 'dist');
 if (fs.existsSync(dist)) {
   app.use(express.static(dist));
@@ -503,7 +471,6 @@ app.use((err: Error, _req: Request, res: Response, _next: express.NextFunction) 
   res.status(500).json({ error: err.message || 'Server error' });
 });
 
-// On Vercel the app is exported as a serverless function instead of listening.
 if (!process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`\n  Global Buyer Export Dashboard API running at http://localhost:${PORT}`);

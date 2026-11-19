@@ -8,7 +8,7 @@ export type MailMode = 'gmail-api' | 'smtp' | 'demo';
 interface Attachment {
   filename: string;
   contentType: string;
-  content: string; // base64
+  content: string;
 }
 
 export function getMode(): MailMode {

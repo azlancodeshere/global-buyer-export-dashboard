@@ -63,7 +63,6 @@ function parseDDG(html: string): SearchResult[] {
         const parsed = new URL(url, 'https://duckduckgo.com');
         url = decodeURIComponent(parsed.searchParams.get('uddg') || url);
       } catch {
-        /* keep original */
       }
     }
     if (!/^https?:\/\//i.test(url)) continue;
@@ -123,7 +122,6 @@ async function cseSearch(query: string): Promise<SearchResult[] | null> {
   }
 }
 
-// Domains that never belong to a real buyer — analytics, error tracking and CDNs.
 const NOISE_DOMAINS = new Set([
   'sentry.io', 'ingest.sentry.io', 'bugsnag.com', 'raygun.io', 'honeybadger.io',
   'google-analytics.com', 'analytics.google.com', 'doubleclick.net', 'hotjar.com',
@@ -137,7 +135,6 @@ async function extractContacts(url: string): Promise<{ emails: string[]; phones:
     const u = new URL(url);
     pages.push(`${u.origin}/contact`, `${u.origin}/contact-us`, `${u.origin}/pages/contact`);
   } catch {
-    /* ignore */
   }
   const emails = new Set<string>();
   const phones = new Set<string>();
@@ -151,7 +148,6 @@ async function extractContacts(url: string): Promise<{ emails: string[]; phones:
       if (/\.(png|jpe?g|gif|svg|webp)$/.test(em)) continue;
       if (/^(noreply|no-reply|donotreply|example|test|your|sentry|admin@localhost)/.test(em)) continue;
       if (em.length > 60) continue;
-      // Skip machine-generated / tracking addresses (Sentry, PostHog, analytics…).
       if (NOISE_DOMAINS.has(em.split('@')[1])) continue;
       if (/[0-9a-f]{16,}/.test(em.split('@')[0])) continue;
       emails.add(em);
@@ -164,7 +160,6 @@ async function extractContacts(url: string): Promise<{ emails: string[]; phones:
   return { emails: [...emails].slice(0, 3), phones: [...phones].slice(0, 2) };
 }
 
-// Full state names → 2-letter codes, so "Houston, Texas, United States" parses correctly.
 const STATE_CODE: Record<string, string> = {
   texas: 'TX', california: 'CA', 'new york': 'NY', florida: 'FL', illinois: 'IL',
   washington: 'WA', georgia: 'GA', massachusetts: 'MA', colorado: 'CO', pennsylvania: 'PA',
@@ -186,15 +181,12 @@ function splitLocation(location = ''): { city: string; state: string; country: s
   const isCountry = (v: string) => COUNTRIES.has(v.toLowerCase());
   const codeOf = (v: string) => STATE_CODE[v.toLowerCase()] || (/^[A-Za-z]{2}$/.test(v) ? v.toUpperCase() : v.toUpperCase().slice(0, 2));
 
-  // "City, State, Country"
   if (parts.length >= 3 && isCountry(parts[parts.length - 1])) {
     return { city: parts[0], state: codeOf(parts[1]), country: parts[parts.length - 1] };
   }
-  // "State, Country" — no city chosen yet (video's state-level narrowing step).
   if (parts.length === 2 && isCountry(parts[1])) {
     return { city: '', state: codeOf(parts[0]), country: parts[1] };
   }
-  // "City, Country"
   if (parts.length === 2 && isCountry(parts[0])) {
     return { city: parts[1], state: '', country: parts[0] };
   }
@@ -253,8 +245,6 @@ export async function discoverBuyers(opts: {
   const selectedSources =
     Array.isArray(opts.sources) && opts.sources.length ? opts.sources : ['Google Search'];
 
-  // Run one search per selected source so multi-select actually works,
-  // then merge and de-duplicate the results by URL.
   const merged = new Map<string, SearchResult & { source: string }>();
   const engines: string[] = [];
 
@@ -280,8 +270,6 @@ export async function discoverBuyers(opts: {
     }
   }
 
-  // Interleave round-robin so every selected source contributes leads
-  // instead of the first source filling the whole slice.
   const bySource = new Map<string, Array<SearchResult & { source: string }>>();
   for (const r of merged.values()) {
     const list = bySource.get(r.source) || [];
@@ -309,7 +297,6 @@ export async function discoverBuyers(opts: {
   let contactsFound = 0;
 
   if (fallback) {
-    // Spread the sample rows across every selected source so each platform is represented.
     const perSource = Math.max(1, Math.ceil(limit / selectedSources.length));
     for (const source of selectedSources) {
       if (created.length >= limit) break;

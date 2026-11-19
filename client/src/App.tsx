@@ -99,7 +99,6 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Close the mobile drawer when resizing past the breakpoint.
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 641px)');
     const onChange = () => { if (mq.matches) setNavOpen(false); };

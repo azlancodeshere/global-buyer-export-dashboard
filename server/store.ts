@@ -5,7 +5,6 @@ import { seedLeads } from './data/seed.js';
 import type { Activity, EmailRecord, Lead, PresentationMeta, StoreKey } from './types.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-// Vercel function filesystems are read-only outside /tmp, so data lives there in production.
 const DATA_DIR = process.env.VERCEL ? '/tmp/gbed-data' : path.join(__dirname, 'data');
 
 type StoreMap = {
@@ -44,7 +43,6 @@ export function write<K extends StoreKey>(key: K, data: StoreMap[K]): void {
   fs.renameSync(tmp, FILES[key]);
 }
 
-// Serialize read-modify-write operations so concurrent requests don't lose data.
 let queue: Promise<unknown> = Promise.resolve();
 export function update<K extends StoreKey, R>(key: K, mutator: (data: StoreMap[K]) => R): Promise<R> {
   const job = queue.then(() => {

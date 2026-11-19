@@ -1,7 +1,5 @@
 import type { Lead } from '../types.js';
 
-// Seed data: realistic (fictional) home-decor / singing-bowl buyers in the US.
-// Tuple: [name, company, email, phone, website, source, product, city, state, classification, emailStatus, emailed]
 
 const RAW: string[][] = [
   ['Michael Carter', 'Lumen Lighting Plus', 'info@lumenlightingplus.com', '+1 713-555-0142', 'lumenlightingplus.com', 'Google Maps', 'Singing Bowls', 'Houston', 'TX', 'business', 'valid', 'true'],
