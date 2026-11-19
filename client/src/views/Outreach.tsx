@@ -153,7 +153,7 @@ export default function Outreach({ leads, config, notify, refresh, runBusy, pres
         <StatCard label="Demo sent" value={history.filter((h) => h.status === 'demo-sent').length} icon={Sparkles} tone="amber" foot="Simulated sends" />
       </div>
 
-      <div className="grid" style={{ gridTemplateColumns: '1.1fr 0.9fr', marginBottom: 16 }}>
+      <div className="grid compose-grid" style={{ marginBottom: 16 }}>
         <Card title="Compose message" subtitle="Use {{name}}, {{company}}, {{product}}, {{city}} and {{sender_name}} as variables">
           <div className="field" style={{ marginBottom: 14 }}>
             <label className="label">Subject</label>

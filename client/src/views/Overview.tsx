@@ -70,16 +70,18 @@ export default function Overview({ stats, goTo, refresh, notify }: SharedProps) 
         </Card>
 
         <Card title="Buyer classification" subtitle="Business vs individual split">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <ResponsiveContainer width="55%" height={230}>
-              <PieChart>
-                <Pie data={stats.classification} dataKey="value" nameKey="name" innerRadius={52} outerRadius={78} paddingAngle={3}>
-                  {stats.classification.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
-                </Pie>
-                <Tooltip {...chartTooltip} />
-              </PieChart>
-            </ResponsiveContainer>
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div className="split-chart">
+            <div className="split-chart-plot">
+              <ResponsiveContainer width="100%" height={230}>
+                <PieChart>
+                  <Pie data={stats.classification} dataKey="value" nameKey="name" innerRadius={52} outerRadius={78} paddingAngle={3}>
+                    {stats.classification.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                  </Pie>
+                  <Tooltip {...chartTooltip} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="split-chart-legend">
               {stats.classification.map((c, i) => (
                 <div key={c.name} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
                   <span style={{ width: 9, height: 9, borderRadius: 3, background: COLORS[i % COLORS.length] }} />

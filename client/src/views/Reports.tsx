@@ -80,16 +80,18 @@ export default function Reports({ stats, leads, notify, runBusy }: SharedProps) 
 
       <div className="grid grid-2" style={{ marginBottom: 16 }}>
         <Card title="Email health" subtitle="Deliverability status across the database">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <ResponsiveContainer width="50%" height={230}>
-              <PieChart>
-                <Pie data={stats?.emailHealth || []} dataKey="value" nameKey="name" innerRadius={52} outerRadius={78} paddingAngle={3}>
-                  {(stats?.emailHealth || []).map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
-                </Pie>
-                <Tooltip {...tooltip} />
-              </PieChart>
-            </ResponsiveContainer>
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div className="split-chart">
+            <div className="split-chart-plot">
+              <ResponsiveContainer width="100%" height={230}>
+                <PieChart>
+                  <Pie data={stats?.emailHealth || []} dataKey="value" nameKey="name" innerRadius={52} outerRadius={78} paddingAngle={3}>
+                    {(stats?.emailHealth || []).map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                  </Pie>
+                  <Tooltip {...tooltip} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="split-chart-legend">
               {(stats?.emailHealth || []).map((h, i) => (
                 <div key={h.name} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
                   <span style={{ width: 9, height: 9, borderRadius: 3, background: COLORS[i % COLORS.length] }} />

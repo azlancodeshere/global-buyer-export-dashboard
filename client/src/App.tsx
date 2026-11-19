@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
   LayoutDashboard, Search, Users, ShieldCheck, Sparkles, Send,
-  BarChart3, Settings2, Globe2, CheckCircle2, AlertCircle, X, RefreshCw,
+  BarChart3, Settings2, Globe2, CheckCircle2, AlertCircle, X, RefreshCw, Menu,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { api } from './api';
@@ -56,6 +56,7 @@ export default function App() {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [busy, setBusy] = useState<string | null>(null);
   const [preselect, setPreselect] = useState<string[]>([]);
+  const [navOpen, setNavOpen] = useState(false);
 
   const notify: NotifyFn = useCallback((type, title, msg = '') => {
     const id = `${Date.now()}_${Math.random()}`;
@@ -94,7 +95,16 @@ export default function App() {
   const goTo = useCallback((id: string, opts: { leadIds?: string[] } = {}) => {
     if (opts.leadIds) setPreselect(opts.leadIds);
     setPage(id as PageId);
+    setNavOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  // Close the mobile drawer when resizing past the breakpoint.
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 641px)');
+    const onChange = () => { if (mq.matches) setNavOpen(false); };
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
   }, []);
 
   const shared: SharedProps = { notify, refresh: load, runBusy, goTo, config, stats, leads };
@@ -136,7 +146,7 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <aside className="sidebar">
+      <aside className={`sidebar ${navOpen ? 'open' : ''}`}>
         <div className="brand">
           <div className="brand-mark"><Globe2 size={19} /></div>
           <div>
@@ -159,11 +169,30 @@ export default function App() {
         </div>
       </aside>
 
+      {navOpen && (
+        <button
+          className="sidebar-backdrop open"
+          aria-label="Close navigation menu"
+          onClick={() => setNavOpen(false)}
+        />
+      )}
+
       <main className="main">
         <header className="topbar">
-          <div>
-            <div className="topbar-title">{TITLES[page][0]}</div>
-            <div className="topbar-sub">{TITLES[page][1]}</div>
+          <div className="topbar-left">
+            <button
+              className="icon-btn menu-btn"
+              title="Open menu"
+              aria-label="Open navigation menu"
+              aria-expanded={navOpen}
+              onClick={() => setNavOpen((o) => !o)}
+            >
+              <Menu size={19} />
+            </button>
+            <div style={{ minWidth: 0 }}>
+              <div className="topbar-title">{TITLES[page][0]}</div>
+              <div className="topbar-sub">{TITLES[page][1]}</div>
+            </div>
           </div>
           <div className="topbar-right">
             <span className={`status-pill ${config?.gemini ? 'on' : 'warn'}`}>
