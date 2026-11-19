@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 import { google } from 'googleapis';
-import type { Lead } from '../types';
+import type { Lead } from '../types.js';
 
 const FROM_NAME = process.env.FROM_NAME || 'Global Exports Team';
 export type MailMode = 'gmail-api' | 'smtp' | 'demo';

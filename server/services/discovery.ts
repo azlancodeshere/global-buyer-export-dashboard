@@ -1,5 +1,5 @@
-import * as store from '../store';
-import type { DiscoveryResult, Lead } from '../types';
+import * as store from '../store.js';
+import type { DiscoveryResult, Lead } from '../types.js';
 
 const UA =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';

@@ -1,5 +1,5 @@
-import { FREE_PROVIDERS } from './validation';
-import type { Classification, Lead } from '../types';
+import { FREE_PROVIDERS } from './validation.js';
+import type { Classification, Lead } from '../types.js';
 
 const MODEL = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
 

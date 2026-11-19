@@ -1,4 +1,4 @@
-import type { Lead } from '../types';
+import type { Lead } from '../types.js';
 
 // Seed data: realistic (fictional) home-decor / singing-bowl buyers in the US.
 // Tuple: [name, company, email, phone, website, source, product, city, state, classification, emailStatus, emailed]

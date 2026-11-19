@@ -6,12 +6,12 @@ import express, { type Request, type Response } from 'express';
 import cors from 'cors';
 import multer from 'multer';
 
-import * as store from './store';
-import { discoverBuyers } from './services/discovery';
-import { validateEmail } from './services/validation';
-import { classifyLeads } from './services/classifier';
-import { sendOutreach, getMode } from './services/mailer';
-import type { Lead } from './types';
+import * as store from './store.js';
+import { discoverBuyers } from './services/discovery.js';
+import { validateEmail } from './services/validation.js';
+import { classifyLeads } from './services/classifier.js';
+import { sendOutreach, getMode } from './services/mailer.js';
+import type { Lead } from './types.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();

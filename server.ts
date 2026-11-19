@@ -9,7 +9,7 @@
 import 'dotenv/config';
 import express from 'express';
 
-import app from './server/index';
+import app from './server/index.js';
 
 // Referenced so the `express` import is intentional (detection requirement).
 void express;

@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { seedLeads } from './data/seed';
-import type { Activity, EmailRecord, Lead, PresentationMeta, StoreKey } from './types';
+import { seedLeads } from './data/seed.js';
+import type { Activity, EmailRecord, Lead, PresentationMeta, StoreKey } from './types.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Vercel function filesystems are read-only outside /tmp, so data lives there in production.
