@@ -71,7 +71,10 @@ a { color: var(--primary); text-decoration: none; }
 .sidebar-backdrop { display: none; }
 .menu-btn { display: none; }
 
-.main { flex: 1; margin-left: 252px; min-width: 0; }
+/* overflow-x: clip guards against any child forcing page-level horizontal
+   scrolling (clip does NOT create a scroll container, so the sticky topbar
+   and fixed modals/toasts keep working) */
+.main { flex: 1; margin-left: 252px; min-width: 0; overflow-x: clip; }
 .topbar {
   height: 68px; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--line); display: flex; align-items: center;
@@ -106,6 +109,13 @@ a { color: var(--primary); text-decoration: none; }
 .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .compose-grid { grid-template-columns: 1.1fr 0.9fr; }
+/* Fixed-width first column + fluid second column (Classification split) */
+.split-grid { grid-template-columns: 320px minmax(0, 1fr); }
+
+/* Filter rows: keep the search field wide, let selects share rows */
+.filter-row .field { flex: 1; }
+.filter-row .field-search { flex: 2; min-width: 200px; }
+.form-grow { flex: 2; min-width: 0; }
 
 /* Chart + legend side by side, wraps when the card gets narrow */
 .split-chart { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
@@ -194,7 +204,7 @@ a { color: var(--primary); text-decoration: none; }
 
 /* ---------- Tables ---------- */
 .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.table { width: 100%; border-collapse: collapse; min-width: 720px; }
+.table { width: 100%; border-collapse: collapse; }
 .table th {
   text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em;
   color: var(--muted); font-weight: 700; padding: 11px 12px; border-bottom: 1px solid var(--line);
@@ -291,7 +301,7 @@ a { color: var(--primary); text-decoration: none; }
   .brand { justify-content: center; padding: 4px 0 22px; }
   .nav-item { justify-content: center; padding: 11px; }
   .main { margin-left: 70px; }
-  .grid-2, .grid-3, .grid-4, .compose-grid { grid-template-columns: 1fr; }
+  .grid-2, .grid-3, .grid-4, .compose-grid, .split-grid { grid-template-columns: 1fr; }
   .page { padding: 20px 18px 40px; }
   .topbar { padding: 0 18px; }
   .status-pill { display: none; }
@@ -338,9 +348,14 @@ a { color: var(--primary); text-decoration: none; }
 
   .grid { gap: 12px; }
   .grid-4, .grid-3 { grid-template-columns: repeat(2, minmax(0,1fr)); }
-  .grid-2, .compose-grid, .form-grid { grid-template-columns: 1fr; }
+  .grid-2, .compose-grid, .split-grid, .form-grid { grid-template-columns: 1fr; }
   .card { padding: 16px; }
   .stat-value { font-size: 22px; }
+
+  /* Filter rows: search full width, two selects per row, notes stacked */
+  .filter-row .field { flex: 1 1 130px; }
+  .filter-row .field-search { flex: 1 1 100%; min-width: 0; }
+  .filter-row .form-grow { flex: 1 1 100%; }
 
   /* Buttons & inputs: comfortable touch targets */
   .btn { padding: 10px 14px; }
@@ -350,6 +365,13 @@ a { color: var(--primary); text-decoration: none; }
   .checkbox { width: 18px; height: 18px; }
 
   .table th, .table td { padding: 10px; }
+  /* Let tables compress instead of forcing a wide min-width: headers may wrap
+     and long values break at word boundaries (emails may break anywhere) */
+  .table th { white-space: normal; }
+  .table td { overflow-wrap: break-word; }
+  .table .cell-email { overflow-wrap: anywhere; }
+  /* Low-priority columns move into the row detail modal on phones */
+  .hide-sm { display: none; }
   .pagination { flex-direction: column; gap: 10px; align-items: stretch; text-align: center; }
   .page-btns { justify-content: center; }
 

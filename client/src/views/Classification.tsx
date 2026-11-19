@@ -69,7 +69,7 @@ export default function Classification({ leads, stats, config, notify, refresh, 
         </div>
       )}
 
-      <div className="grid" style={{ gridTemplateColumns: '320px 1fr', marginBottom: 16 }}>
+      <div className="grid split-grid" style={{ marginBottom: 16 }}>
         <Card title="Classification split" subtitle="Distribution of buyer types">
           <ResponsiveContainer width="100%" height={230}>
             <PieChart>
@@ -93,7 +93,7 @@ export default function Classification({ leads, stats, config, notify, refresh, 
           {leads.length ? (
             <div className="table-wrap">
               <table className="table">
-                <thead><tr><th>Company</th><th>Email</th><th>Type</th><th>Confidence</th><th>Reason</th></tr></thead>
+                <thead><tr><th>Company</th><th>Email</th><th>Type</th><th>Confidence</th><th className="hide-sm">Reason</th></tr></thead>
                 <tbody>
                   {leads.slice(0, 14).map((l) => (
                     <tr key={l.id}>
@@ -101,7 +101,7 @@ export default function Classification({ leads, stats, config, notify, refresh, 
                       <td><div className="cell-email" style={{ maxWidth: 190, overflow: 'hidden', textOverflow: 'ellipsis' }}>{l.email || '—'}</div><div className="cell-sub"><EmailBadge status={l.emailStatus} /></div></td>
                       <td><ClassBadge value={l.classification} /></td>
                       <td><ConfidenceBar value={l.classificationConfidence} /></td>
-                      <td style={{ maxWidth: 260 }}><span className="hint">{l.classificationReason || 'Not classified yet'}</span></td>
+                      <td className="hide-sm" style={{ maxWidth: 260 }}><span className="hint">{l.classificationReason || 'Not classified yet'}</span></td>
                     </tr>
                   ))}
                 </tbody>

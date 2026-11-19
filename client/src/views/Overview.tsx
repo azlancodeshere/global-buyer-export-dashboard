@@ -134,15 +134,15 @@ export default function Overview({ stats, goTo, refresh, notify }: SharedProps) 
         >
           {stats.recentLeads.length ? (
             <div className="table-wrap">
-              <table className="table" style={{ minWidth: 560 }}>
-                <thead><tr><th>Buyer</th><th>Source</th><th>Email</th><th>Type</th></tr></thead>
+              <table className="table">
+                <thead><tr><th>Buyer</th><th>Source</th><th>Email</th><th className="hide-sm">Type</th></tr></thead>
                 <tbody>
                   {stats.recentLeads.map((l) => (
                     <tr key={l.id}>
                       <td><div className="cell-main">{l.company}</div><div className="cell-sub">{l.name} · {l.city}, {l.state}</div></td>
                       <td><Badge tone="gray">{l.source}</Badge></td>
                       <td><EmailBadge status={l.emailStatus} /></td>
-                      <td><ClassBadge value={l.classification} /></td>
+                      <td className="hide-sm"><ClassBadge value={l.classification} /></td>
                     </tr>
                   ))}
                 </tbody>

@@ -248,14 +248,14 @@ export default function Discovery({ notify, refresh, runBusy, config, goTo }: Sh
             </div>
             <span className="hint">Every selected platform is searched in one run and merged, with duplicates skipped.</span>
           </div>
-          <div className="form-row">
-            <div className="field" style={{ flex: 1 }}>
+          <div className="form-row filter-row">
+            <div className="field">
               <label className="label">Max results</label>
               <select className="select" value={limit} onChange={(e) => setLimit(Number(e.target.value))}>
                 {[5, 8, 12, 20].map((n) => <option key={n} value={n}>{n} buyers</option>)}
               </select>
             </div>
-            <div style={{ flex: 2 }}>
+            <div className="form-grow">
               <div className="callout blue">
                 {config?.discovery === 'api'
                   ? <><CheckCircle2 size={15} /> Live search API configured. Results are scraped from real web pages.</>
@@ -314,15 +314,15 @@ export default function Discovery({ notify, refresh, runBusy, config, goTo }: Sh
           <div className="callout blue" style={{ marginBottom: 12 }}><Sparkles size={15} /> Engine: <strong>{result.engine}</strong> · Query: <span className="code">{result.query}</span></div>
           {result.leads.length ? (
             <div className="table-wrap">
-              <table className="table" style={{ minWidth: 620 }}>
-                <thead><tr><th>Company</th><th>Contact</th><th>Email</th><th>Phone</th><th>Location</th></tr></thead>
+              <table className="table">
+                <thead><tr><th>Company</th><th>Contact</th><th>Email</th><th className="hide-sm">Phone</th><th>Location</th></tr></thead>
                 <tbody>
                   {result.leads.slice(0, 12).map((l) => (
                     <tr key={l.id}>
                       <td className="cell-main">{l.company}</td>
                       <td>{l.name}</td>
                       <td className="cell-email">{l.email || '—'}</td>
-                      <td>{l.phone || '—'}</td>
+                      <td className="hide-sm">{l.phone || '—'}</td>
                       <td>{l.city}, {l.state}</td>
                     </tr>
                   ))}

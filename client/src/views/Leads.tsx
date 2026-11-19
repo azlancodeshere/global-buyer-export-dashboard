@@ -145,20 +145,20 @@ export default function Leads({ leads, notify, refresh, runBusy, goTo, setPresel
       </div>
 
       <Card title="Buyer database" subtitle="Search, filter and manage your leads">
-        <div className="form-row" style={{ marginBottom: 14 }}>
-          <div className="field" style={{ flex: 2, minWidth: 200 }}>
+        <div className="form-row filter-row" style={{ marginBottom: 14 }}>
+          <div className="field field-search">
             <div style={{ position: 'relative' }}>
               <Search size={15} style={{ position: 'absolute', left: 11, top: 10, color: '#94a3b8' }} />
               <input className="input" style={{ paddingLeft: 33 }} value={q} onChange={(e) => { setQ(e.target.value); setCurrentPage(1); }} placeholder="Search name, company, email, city…" />
             </div>
           </div>
-          <div className="field" style={{ flex: 1 }}>
+          <div className="field">
             <select className="select" value={source} onChange={(e) => { setSource(e.target.value); setCurrentPage(1); }}>
               <option value="all">All sources</option>
               {sources.map((s) => <option key={s} value={s}>{s}</option>)}
             </select>
           </div>
-          <div className="field" style={{ flex: 1 }}>
+          <div className="field">
             <select className="select" value={classification} onChange={(e) => { setClassification(e.target.value); setCurrentPage(1); }}>
               <option value="all">All types</option>
               <option value="business">Business</option>
@@ -166,7 +166,7 @@ export default function Leads({ leads, notify, refresh, runBusy, goTo, setPresel
               <option value="unclassified">Unclassified</option>
             </select>
           </div>
-          <div className="field" style={{ flex: 1 }}>
+          <div className="field">
             <select className="select" value={emailStatus} onChange={(e) => { setEmailStatus(e.target.value); setCurrentPage(1); }}>
               <option value="all">All email states</option>
               <option value="valid">Valid</option>
@@ -175,7 +175,7 @@ export default function Leads({ leads, notify, refresh, runBusy, goTo, setPresel
               <option value="unchecked">Unchecked</option>
             </select>
           </div>
-          <div className="field" style={{ flex: 1 }}>
+          <div className="field">
             <select className="select" value={emailed} onChange={(e) => { setEmailed(e.target.value); setCurrentPage(1); }}>
               <option value="all">All outreach</option>
               <option value="false">Not contacted</option>
@@ -202,12 +202,12 @@ export default function Leads({ leads, notify, refresh, runBusy, goTo, setPresel
             <table className="table">
               <thead>
                 <tr>
-                  <th style={{ width: 34 }}><input type="checkbox" className="checkbox" checked={pageRows.length > 0 && pageRows.every((l) => selected.has(l.id))} onChange={toggleAll} /></th>
+                  <th className="hide-sm" style={{ width: 34 }}><input type="checkbox" className="checkbox" checked={pageRows.length > 0 && pageRows.every((l) => selected.has(l.id))} onChange={toggleAll} /></th>
                   <th>Buyer</th>
                   <th>Contact</th>
-                  <th>Location</th>
-                  <th>Source</th>
-                  <th>Type</th>
+                  <th className="hide-sm">Location</th>
+                  <th className="hide-sm">Source</th>
+                  <th className="hide-sm">Type</th>
                   <th>Email</th>
                   <th>Status</th>
                   <th style={{ width: 50 }} />
@@ -216,7 +216,7 @@ export default function Leads({ leads, notify, refresh, runBusy, goTo, setPresel
               <tbody>
                 {pageRows.map((l) => (
                   <tr key={l.id} className={selected.has(l.id) ? 'selected-row' : ''}>
-                    <td><input type="checkbox" className="checkbox" checked={selected.has(l.id)} onChange={() => toggle(l.id)} /></td>
+                    <td className="hide-sm"><input type="checkbox" className="checkbox" checked={selected.has(l.id)} onChange={() => toggle(l.id)} /></td>
                     <td onClick={() => setDetail(l)} style={{ cursor: 'pointer' }}>
                       <div className="cell-main">{l.company}</div>
                       <div className="cell-sub">{l.name}</div>
@@ -225,9 +225,9 @@ export default function Leads({ leads, notify, refresh, runBusy, goTo, setPresel
                       <div className="cell-email">{l.email || '—'}</div>
                       <div className="cell-sub">{l.phone || 'No phone'}</div>
                     </td>
-                    <td><div>{l.city || '—'}{l.state ? `, ${l.state}` : ''}</div><div className="cell-sub">{l.country}</div></td>
-                    <td><Badge tone="gray">{l.source}</Badge></td>
-                    <td><ClassBadge value={l.classification} /></td>
+                    <td className="hide-sm"><div>{l.city || '—'}{l.state ? `, ${l.state}` : ''}</div><div className="cell-sub">{l.country}</div></td>
+                    <td className="hide-sm"><Badge tone="gray">{l.source}</Badge></td>
+                    <td className="hide-sm"><ClassBadge value={l.classification} /></td>
                     <td><EmailBadge status={l.emailStatus} /></td>
                     <td>{l.emailed ? <Badge tone="blue" dot>Contacted</Badge> : <Badge tone="gray">Not contacted</Badge>}</td>
                     <td>

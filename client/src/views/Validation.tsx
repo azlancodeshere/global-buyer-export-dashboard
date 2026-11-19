@@ -76,7 +76,7 @@ export default function Validation({ leads, stats, notify, refresh, runBusy, goT
         {leads.length ? (
           <div className="table-wrap">
             <table className="table">
-              <thead><tr><th>Buyer</th><th>Email address</th><th>Status</th><th>Last checked</th><th>Product</th><th>Source</th></tr></thead>
+              <thead><tr><th>Buyer</th><th>Email address</th><th>Status</th><th>Last checked</th><th className="hide-sm">Product</th><th className="hide-sm">Source</th></tr></thead>
               <tbody>
                 {leads.map((l) => (
                   <tr key={l.id}>
@@ -84,8 +84,8 @@ export default function Validation({ leads, stats, notify, refresh, runBusy, goT
                     <td className="cell-email">{l.email || '—'}</td>
                     <td><EmailBadge status={l.emailStatus} /></td>
                     <td>{fmtDateTime(l.emailCheckedAt)}</td>
-                    <td>{l.product}</td>
-                    <td>{l.source}</td>
+                    <td className="hide-sm">{l.product}</td>
+                    <td className="hide-sm">{l.source}</td>
                   </tr>
                 ))}
               </tbody>

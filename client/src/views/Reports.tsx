@@ -119,12 +119,12 @@ export default function Reports({ stats, leads, notify, runBusy }: SharedProps) 
         {activity.length ? (
           <div className="table-wrap">
             <table className="table">
-              <thead><tr><th>Event</th><th>Type</th><th>Details</th><th>Time</th></tr></thead>
+              <thead><tr><th>Event</th><th className="hide-sm">Type</th><th>Details</th><th>Time</th></tr></thead>
               <tbody>
                 {activity.slice(0, 40).map((a) => (
                   <tr key={a.id}>
                     <td><div style={{ display: 'flex', alignItems: 'center', gap: 8 }}><ActivityIcon size={14} color="#64748b" /><span className="cell-main">{a.message}</span></div></td>
-                    <td><Badge tone={a.type === 'email' ? 'blue' : a.type === 'discovery' ? 'violet' : a.type === 'classification' ? 'green' : 'gray'}>{a.type}</Badge></td>
+                    <td className="hide-sm"><Badge tone={a.type === 'email' ? 'blue' : a.type === 'discovery' ? 'violet' : a.type === 'classification' ? 'green' : 'gray'}>{a.type}</Badge></td>
                     <td><span className="hint">{Object.entries(a.meta || {}).map(([k, v]) => `${k}: ${String(v)}`).join(' · ') || '—'}</span></td>
                     <td>{fmtDateTime(a.createdAt)}</td>
                   </tr>

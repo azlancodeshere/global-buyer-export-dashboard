@@ -228,7 +228,7 @@ export default function Outreach({ leads, config, notify, refresh, runBusy, pres
             <Badge tone="gray">{sendResult.results.filter((r) => r.status === 'skipped').length} skipped</Badge>
           </div>
           <div className="table-wrap">
-            <table className="table" style={{ minWidth: 520 }}>
+            <table className="table">
               <thead><tr><th>Email</th><th>Status</th><th>Detail</th></tr></thead>
               <tbody>
                 {sendResult.results.map((r, i) => (
@@ -248,16 +248,16 @@ export default function Outreach({ leads, config, notify, refresh, runBusy, pres
         {history.length ? (
           <div className="table-wrap">
             <table className="table">
-              <thead><tr><th>Buyer</th><th>Email</th><th>Subject</th><th>Attachment</th><th>Status</th><th>Sent</th></tr></thead>
+              <thead><tr><th>Buyer</th><th>Email</th><th>Subject</th><th className="hide-sm">Attachment</th><th>Status</th><th className="hide-sm">Sent</th></tr></thead>
               <tbody>
                 {history.slice(0, 25).map((h) => (
                   <tr key={h.id}>
                     <td><div className="cell-main">{h.company}</div><div className="cell-sub">{h.name}</div></td>
                     <td className="cell-email">{h.email}</td>
                     <td style={{ maxWidth: 260, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{h.subject}</td>
-                    <td>{h.attachment ? <><Paperclip size={12} style={{ verticalAlign: -2 }} /> {h.attachment}</> : '—'}</td>
+                    <td className="hide-sm">{h.attachment ? <><Paperclip size={12} style={{ verticalAlign: -2 }} /> {h.attachment}</> : '—'}</td>
                     <td><Badge tone={h.status === 'sent' ? 'green' : h.status === 'demo-sent' ? 'amber' : 'red'}>{h.status}</Badge></td>
-                    <td>{fmtDateTime(h.sentAt)}</td>
+                    <td className="hide-sm">{fmtDateTime(h.sentAt)}</td>
                   </tr>
                 ))}
               </tbody>
