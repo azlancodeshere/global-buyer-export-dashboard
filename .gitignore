@@ -8,3 +8,5 @@ server/data/*.json
 server/uploads/
 *.tsbuildinfo
 .DS_Store
+.vercel
+.env*
