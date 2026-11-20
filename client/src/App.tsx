@@ -110,6 +110,7 @@ export default function App() {
 
   let content;
   switch (page) {
+    
     case 'discovery':
       content = <Discovery {...shared} />;
       break;
@@ -164,7 +165,20 @@ export default function App() {
         {renderNav(NAV.slice(6))}
 
         <div className="sidebar-foot">
-          <p>Focus product<br /><strong style={{ color: '#cbd5e1' }}>Singing Bowls / Home Décor</strong><br />Target market: United States</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+            <div style={{
+              width: 28, height: 28, borderRadius: 8, flex: '0 0 auto',
+              background: 'linear-gradient(135deg,rgba(99,102,241,0.25),rgba(139,92,246,0.15))',
+              display: 'grid', placeItems: 'center', border: '1px solid rgba(165,180,252,0.18)',
+            }}>
+              <Globe2 size={14} color="#a5b4fc" />
+            </div>
+            <div>
+              <div style={{ fontSize: 10, color: '#3d526b', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Focus Product</div>
+              <div style={{ fontSize: 12, color: '#c8d4e8', fontWeight: 600, lineHeight: 1.3 }}>Singing Bowls / Home Décor</div>
+            </div>
+          </div>
+          <div style={{ fontSize: 10.5, color: '#3d526b', fontWeight: 500 }}>🌐 Target: United States</div>
         </div>
       </aside>
 
@@ -186,7 +200,7 @@ export default function App() {
               aria-expanded={navOpen}
               onClick={() => setNavOpen((o) => !o)}
             >
-              <Menu size={19} />
+              <Menu size={18} />
             </button>
             <div style={{ minWidth: 0 }}>
               <div className="topbar-title">{TITLES[page][0]}</div>
@@ -198,9 +212,9 @@ export default function App() {
               <span className="dot" /> Gemini {!config ? 'Connecting…' : config.gemini ? 'Connected' : 'Not set'}
             </span>
             <span className={`status-pill ${config?.mail === 'demo' ? 'warn' : 'on'}`}>
-              <span className="dot" /> Mail: {!config ? 'Connecting…' : config.mail === 'demo' ? 'Demo' : config.mail === 'smtp' ? 'SMTP' : 'Gmail API'}
+              <span className="dot" /> Mail: {!config ? '…' : config.mail === 'demo' ? 'Demo' : config.mail === 'smtp' ? 'SMTP' : 'Gmail'}
             </span>
-            <button className="icon-btn" title="Refresh data" onClick={load}><RefreshCw size={16} /></button>
+            <button className="icon-btn" title="Refresh data" onClick={load}><RefreshCw size={15} /></button>
             <div className="avatar">GB</div>
           </div>
         </header>

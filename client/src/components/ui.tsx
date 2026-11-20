@@ -77,7 +77,7 @@ export function StatCard({
         <span className="stat-label">{label}</span>
         {Icon && (
           <div className="card-icon" style={{ background: soft, color }}>
-            <Icon size={17} />
+            <Icon size={18} />
           </div>
         )}
       </div>
@@ -116,8 +116,16 @@ export function ClassBadge({ value }: { value: Classification }) {
 export function Empty({ icon: Icon, title = 'Nothing here yet', text }: { icon?: LucideIcon; title?: string; text?: string }) {
   return (
     <div className="empty">
-      {Icon && <Icon size={34} />}
-      {title && <div style={{ fontWeight: 600 }}>{title}</div>}
+      {Icon && (
+        <div style={{
+          width: 52, height: 52, borderRadius: 16, background: 'var(--line-soft)',
+          display: 'grid', placeItems: 'center', marginBottom: 4,
+          border: '1px solid var(--line)',
+        }}>
+          <Icon size={24} style={{ opacity: 0.4 }} />
+        </div>
+      )}
+      {title && <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text-soft)' }}>{title}</div>}
       {text && <p>{text}</p>}
     </div>
   );
